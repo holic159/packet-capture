@@ -31,29 +31,29 @@ void packetHandler(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_c
       ip_version = packet[14] >> 4;
       if((int)ip_version == 4){                                                  // ip_version == 4
 
-
-          source_ip_long = *((long *)&(packet[26]));
-          destination_ip_long = *((long *)&(packet[30]));
+          source_ip_long = *((long *)&(packet[26]));                             // get Source IP
+          destination_ip_long = *((long *)&(packet[30]));                        // get Destination IP
           struct in_addr source_ip;
           struct in_addr destination_ip;
           source_ip.s_addr = source_ip_long;
           destination_ip.s_addr = destination_ip_long;
 
-          source_port = ntohs(*((unsigned short *)&(packet[34])));
-          destination_port = ntohs(*((unsigned short *)&(packet[36])));
+          source_port = ntohs(*((unsigned short *)&(packet[34])));               // get Source Port
+          destination_port = ntohs(*((unsigned short *)&(packet[36])));          // get Destination Port
+
           cout << "=================================================================="<< endl;
+
           cout << "Packet Size is " << dec << pkthdr->len << " Byte" << endl;    // print packet size
-          cout << "Source MAC address\t\t->\t" << source_mac << endl;                 // print Sourc MAC Address
-          cout << "Destination MAC address\t->\t" << destination_mac << endl;       // print Destination MAC Address
-          cout << "Source IP:Port\t\t->\t" << inet_ntoa(source_ip) << ":" << source_port << endl;
-          cout << "Destination IP:Port\t\t->\t" << inet_ntoa(destination_ip)<< ":" << destination_port << endl;
+          cout << "Source MAC address\t\t->\t" << source_mac << endl;            // print Sourc MAC Address
+          cout << "Destination MAC address\t->\t" << destination_mac << endl;    // print Destination MAC Address
+          cout << "Source IP:Port\t\t->\t" << inet_ntoa(source_ip) << ":" << source_port << endl;                // print Source IP
+          cout << "Destination IP:Port\t\t->\t" << inet_ntoa(destination_ip)<< ":" << destination_port << endl;  // print Destination IP
+
           cout << "=================================================================="<< endl;
 
       }
 
   }
-
-  //unsigned short dport = ntohs(*((unsigned short *)&(packet)));
 
 }
 
