@@ -1,15 +1,12 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <pcap.h>
+
+MainWindow *indexWindow;
 
 int main(int argc, char *argv[])
 {
-    test();
-    /*
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    indexWindow = new MainWindow();
+    indexWindow -> show();
     return a.exec();
-    */
-    return 0;
 }
