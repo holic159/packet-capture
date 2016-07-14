@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "packetdata.h"
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i=0;i<7;i++){
         ui->packetTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);     // qtablewidget auto sizing
     }
-    ui->packetTable->connect(ui->packetTable, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClick(int, int)));
+    ui->packetTable->connect(ui->packetTable, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClick(int, int)));  // cell doubleclick event connect
 
     packetData = new PacketdataList();
     m_thread = new CaptureThread(this);
@@ -76,8 +77,54 @@ void MainWindow::stop_button_click()
     ui->currentStatusValue->setStyleSheet("QLabel { color : red; }");
 }
 
-void MainWindow::cellDoubleClick(int x, int y)
+void MainWindow::cellDoubleClick(int row, int column)
 {
-    cout << "test" << endl;
+    int packetSize = ui->packetTable->item(row, 6)->text().toInt();
+    size_t offset = 0;
+    size_t buf16Len;
+    char buf16[16];
+    char temp_buffer[200];
+    int temp = packetSize;
+
+    ui->packetData->setText("");                                // reset
+
+    while(1){
+        temp-=16;
+        if(temp < -15) break;
+        else if(temp <= 0) buf16Len = temp+16;
+        else buf16Len = 16;
+        strncpy(buf16, (const char*)packetData->get_packet(row)+offset, buf16Len);
+
+        sprintf(temp_buffer, "%08X:  ", offset);                   // print offset
+
+        ui->packetData->insertPlainText (temp_buffer);
+
+        for (int i = 0; i < (int) buf16Len; i++) {
+          if (i == 8) ui->packetData->insertPlainText(" ");
+          sprintf(temp_buffer, "%02X ", (unsigned char) buf16[i]);
+          ui->packetData->insertPlainText(temp_buffer);
+        }
+
+        for (int i = 0; i <= (16 - (int) buf16Len) * 3; i++)
+          ui->packetData->insertPlainText(" ");
+        if (buf16Len < 9) ui->packetData->insertPlainText("  ");
+
+
+        for (int i = 0; i < (int) buf16Len; i++) {
+          if (buf16[i] >= 0x20 && buf16[i] <= 0x7E){
+            sprintf(temp_buffer, "%c", buf16[i]);
+            ui->packetData->insertPlainText(temp_buffer);
+          }
+          else ui->packetData->insertPlainText(".");
+        }
+
+        offset += 16;                                           // add offset
+        ui->packetData->insertPlainText("\n");
+
+    }
+
+
+    //packetData -> get_packet(row)
+    //cout << packetSize << endl;
 }
 

@@ -11,7 +11,7 @@ class PacketdataList {
   public:
     PacketdataList();
     void save_packet (const u_char* );
-    void get_packet (int offset);
+    const u_char* get_packet (int offset);
 };
 
 #endif // PACKETDATA_H

@@ -11,8 +11,8 @@ void PacketdataList::save_packet (const u_char* packet) {
   packetList.push_back(packet);
 }
 
-void PacketdataList::get_packet (int offset) {
+const u_char* PacketdataList::get_packet (int offset) {
   const u_char* temp_data;
-  temp_data = packetList[0];
-  cout << temp_data[1] << endl;
+  temp_data = packetList[offset];
+  return temp_data;
 }
