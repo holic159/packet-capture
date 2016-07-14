@@ -41,7 +41,7 @@ void test(u_char *userData, const struct pcap_pkthdr* pkthdr, const u_char* pack
                 source_port = ntohs(*((unsigned short *)&(packet[34])));               // get Source Port
                 destination_port = ntohs(*((unsigned short *)&(packet[36])));          // get Destination Port
 
-                indexWindow -> on_packet_capture(pkthdr->len, source_mac, destination_mac, source_ip, source_port, destination_ip, destination_port);
+                indexWindow -> on_packet_capture(pkthdr->len, source_mac, destination_mac, source_ip, source_port, destination_ip, destination_port, packet);
 
             }
         }

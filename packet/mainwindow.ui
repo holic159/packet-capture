@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>959</width>
-    <height>566</height>
+    <height>762</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,74 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>40</y>
       <width>921</width>
-      <height>491</height>
+      <height>421</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="runButton">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>10</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopButton">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>10</y>
+      <width>80</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="currentStatusLabel">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Current Status : </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="currentStatusValue">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>10</y>
+      <width>59</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel { color : red; }</string>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="packetData">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>470</y>
+      <width>921</width>
+      <height>231</height>
      </rect>
     </property>
    </widget>
@@ -47,5 +112,42 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>runButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>run_button_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>783</x>
+     <y>61</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>706</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stopButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>stop_button_click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>926</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>948</x>
+     <y>70</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>run_button_click()</slot>
+  <slot>stop_button_click()</slot>
+ </slots>
 </ui>

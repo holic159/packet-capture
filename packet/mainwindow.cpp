@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "packetdata.h"
 #include <iostream>
 
 using namespace std;
@@ -15,21 +16,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->packetTable->setColumnCount(7);
     horzHeaders<<"Source MAC"<<"Destination MAC"<<"Source IP"<<"Source Port"<<"Destination IP"<<"Destination Port"<<"Packet Size";
     ui->packetTable->setHorizontalHeaderLabels(horzHeaders);
+    ui->packetTable->setEditTriggers(QAbstractItemView::NoEditTriggers);                        // read only
     for(int i=0;i<7;i++){
-        ui->packetTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+        ui->packetTable->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);     // qtablewidget auto sizing
     }
+    ui->packetTable->connect(ui->packetTable, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClick(int, int)));
 
-    CaptureThread* m_thread;
+    packetData = new PacketdataList();
     m_thread = new CaptureThread(this);
-    m_thread->start();
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete packetData;
+    delete m_thread;
 }
 
-void MainWindow::on_packet_capture(const bpf_u_int32 packet_size, char* source_mac, char* destination_mac, in_addr source_ip, short unsigned int source_port, in_addr destination_ip, short unsigned int destination_port)
+void MainWindow::on_packet_capture(const bpf_u_int32 packet_size, char* source_mac, char* destination_mac, in_addr source_ip, short unsigned int source_port, in_addr destination_ip, short unsigned int destination_port,  const u_char* packet)
 
 {
     int temp = ui->packetTable->rowCount();
@@ -41,7 +46,7 @@ void MainWindow::on_packet_capture(const bpf_u_int32 packet_size, char* source_m
     ui->packetTable->setItem(temp, 4, new QTableWidgetItem(inet_ntoa(destination_ip)));         // print Destination IP
     ui->packetTable->setItem(temp, 5, new QTableWidgetItem(tr("%1").arg(destination_port)));    // print Destination Port
     ui->packetTable->setItem(temp, 6, new QTableWidgetItem(tr("%1").arg(packet_size)));         // print packet size
-
+    packetData -> save_packet(packet);
 /*  cli packet information
     cout << "=================================================================="<< endl;
 
@@ -53,5 +58,26 @@ void MainWindow::on_packet_capture(const bpf_u_int32 packet_size, char* source_m
 
     cout << "=================================================================="<< endl;
 */
-
 }
+
+
+void MainWindow::run_button_click()
+{
+    m_thread->start();
+    ui->currentStatusValue->setText("Capturing");
+    ui->currentStatusValue->setStyleSheet("QLabel { color : green; }");
+}
+
+void MainWindow::stop_button_click()
+{
+    m_thread->terminate();
+    m_thread->wait();
+    ui->currentStatusValue->setText("Stop");
+    ui->currentStatusValue->setStyleSheet("QLabel { color : red; }");
+}
+
+void MainWindow::cellDoubleClick(int x, int y)
+{
+    cout << "test" << endl;
+}
+

@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     capture.cpp \
-    capturethread.cpp
+    capturethread.cpp \
+    packetdata.cpp
 
 HEADERS  += mainwindow.h \
-    capturethread.h
+    capturethread.h \
+    packetdata.h
 LIBS += -L/usr/include/pcap
 LIBS += -lpcap
 INCLUDEPATH += /usr/include/pcap
